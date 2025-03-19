@@ -6,62 +6,28 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Build & Package CO2 Calculator
+name: Java CO2 Calculator CI/CD
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: 🛎️ Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: 🔧 Set Up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'maven'
-
-      - name: 📦 Build with Maven
-        run: mvn clean package
-
-      - name: 🎯 Make JAR Executable
-        run: chmod +x target/co2-calculator-0.0.1-SNAPSHOT.jar
-
-      - name: 🚀 Run Tests
-        run: mvn test
-
-      - name: 🔥 Install GraalVM
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc musl-dev
-          curl -L https://github.com/graalvm/graalvm-ce-builds/releases/latest/download/graalvm-ce-java21-linux-amd64.tar.gz -o graalvm.tar.gz
-          tar -xzf graalvm.tar.gz
-          sudo mv graalvm-ce-java21-* /opt/graalvm
-          echo "export PATH=/opt/graalvm/bin:$PATH" >> $GITHUB_ENV
-          echo "export JAVA_HOME=/opt/graalvm" >> $GITHUB_ENV
-          /opt/graalvm/bin/gu install native-image
-
-      - name: 🏗️ Build Native Executable
-        run: |
-          /opt/graalvm/bin/native-image -jar target/co2-calculator-0.0.1-SNAPSHOT.jar co2-calculator
-          chmod +x co2-calculator
-
-      - name: 📤 Upload Executable
-        uses: actions/upload-artifact@v4
-        with:
-          name: co2-calculator
-          path: co2-calculator
-
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+    
+    - name: Compile Java code
+      run: javac CO2Calculator.java
+    
+    - name: Run CO2 Calculator
+      run: java CO2Calculator 100
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
