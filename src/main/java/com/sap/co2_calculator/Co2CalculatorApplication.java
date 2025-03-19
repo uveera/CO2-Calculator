@@ -1,13 +1,7 @@
-package com.sap.co2_calculator;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class Co2CalculatorApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(Co2CalculatorApplication.class, args);
-	}
-
+public class CO2Calculator {
+    public static void main(String[] args) {
+        double milesDriven = Double.parseDouble(args[0]);
+        double co2Emissions = milesDriven * 0.411; // CO2 emissions per mile (example value)
+        System.out.println("CO2 Emissions: " + co2Emissions + " kg");
+    }
 }
